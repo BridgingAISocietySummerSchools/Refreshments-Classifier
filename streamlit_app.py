@@ -138,91 +138,73 @@ def submit_feedback(recommendation_id, rating, feedback_text):
         return False
 
 # Main application
-col1, col2 = st.columns([2, 1])
+st.markdown("### 🎯 Tell us your preferences")
 
-with col1:
-    st.markdown("### 🎯 Tell us your preferences")
-    
-    # Beverage preferences
-    beverage_type = st.selectbox(
-        "🍺 What type of beverage are you in the mood for?",
-        ["Beer", "Non-alcoholic", "Wine", "Spirits", "Mixed drinks", "Traditional Bavarian", "Surprise me!"]
-    )
-    
-    # Occasion
-    occasion = st.selectbox(
-        "🎪 What's the occasion?",
-        ["Oktoberfest celebration", "Casual evening", "Festive gathering", "Romantic dinner", 
-         "Business meeting", "Outdoor activity", "Cold weather comfort", "Hot summer day"]
-    )
-    
-    # Flavor preferences
-    flavor_preference = st.selectbox(
-        "😋 Flavor preference?",
-        ["Bold and robust", "Light and refreshing", "Sweet and fruity", "Hoppy and bitter", 
-         "Smooth and mellow", "Spicy and warming", "Traditional Bavarian flavors"]
-    )
-    
-    # Alcohol strength
-    alcohol_preference = st.slider(
-        "🌡️ Alcohol strength preference (0 = non-alcoholic, 10 = very strong)",
-        min_value=0, max_value=10, value=5
-    )
-    
-    # Additional preferences
-    st.markdown("### 🎨 Additional preferences")
-    
-    col_a, col_b = st.columns(2)
-    with col_a:
-        temperature = st.selectbox("🌡️ Temperature", ["Ice cold", "Chilled", "Room temperature", "Warm"])
-        sweetness = st.slider("🍯 Sweetness level", 1, 10, 5)
-    
-    with col_b:
-        carbonation = st.selectbox("💨 Carbonation", ["Still", "Lightly sparkling", "Highly carbonated"])
-        serving_size = st.selectbox("📏 Serving size", ["Small (0.2L)", "Medium (0.5L)", "Large (1L)", "Extra large (1L+)"])
-    
-    # Special notes
-    special_notes = st.text_area(
-        "📝 Any special requests or dietary restrictions?",
-        placeholder="e.g., gluten-free, low-calorie, traditional recipe, etc."
-    )
-    
-    # Get recommendation button
-    if st.button("🍺 Get My Bavarian Recommendation!", use_container_width=True):
-        preferences = {
-            "beverage_type": beverage_type,
-            "occasion": occasion,
-            "flavor_preference": flavor_preference,
-            "alcohol_preference": alcohol_preference,
-            "temperature": temperature,
-            "sweetness": sweetness,
-            "carbonation": carbonation,
-            "serving_size": serving_size,
-            "special_notes": special_notes,
-            "timestamp": datetime.now().isoformat()
-        }
-        
-        with st.spinner("🔮 Consulting our Bavarian beverage master..."):
-            recommendation = get_recommendation(preferences)
-            
-            if recommendation:
-                st.session_state.last_recommendation = recommendation
-                st.session_state.show_feedback = True
+# Beverage preferences
+beverage_type = st.selectbox(
+    "🍺 What type of beverage are you in the mood for?",
+    ["Beer", "Non-alcoholic", "Wine", "Spirits", "Mixed drinks", "Traditional Bavarian", "Surprise me!"]
+)
 
-with col2:
-    st.markdown("### 🏔️ About Bavarian Beverages")
-    st.markdown("""
-    <div class="recommendation-card">
-        <h4>🍺 Beer Culture</h4>
-        <p>Bavaria is home to over 600 breweries and the famous Oktoberfest!</p>
+# Occasion
+occasion = st.selectbox(
+    "🎪 What's the occasion?",
+    ["Oktoberfest celebration", "Casual evening", "Festive gathering", "Romantic dinner", 
+     "Business meeting", "Outdoor activity", "Cold weather comfort", "Hot summer day"]
+)
+
+# Flavor preferences
+flavor_preference = st.selectbox(
+    "😋 Flavor preference?",
+    ["Bold and robust", "Light and refreshing", "Sweet and fruity", "Hoppy and bitter", 
+     "Smooth and mellow", "Spicy and warming", "Traditional Bavarian flavors"]
+)
+
+# Alcohol strength
+alcohol_preference = st.slider(
+    "🌡️ Alcohol strength preference (0 = non-alcoholic, 10 = very strong)",
+    min_value=0, max_value=10, value=5
+)
+
+# Additional preferences
+st.markdown("### 🎨 Additional preferences")
+
+col_a, col_b = st.columns(2)
+with col_a:
+    temperature = st.selectbox("🌡️ Temperature", ["Ice cold", "Chilled", "Room temperature", "Warm"])
+    sweetness = st.slider("🍯 Sweetness level", 1, 10, 5)
+
+with col_b:
+    carbonation = st.selectbox("💨 Carbonation", ["Still", "Lightly sparkling", "Highly carbonated"])
+    serving_size = st.selectbox("📏 Serving size", ["Small (0.2L)", "Medium (0.5L)", "Large (1L)", "Extra large (1L+)"])
+
+# Special notes
+special_notes = st.text_area(
+    "📝 Any special requests or dietary restrictions?",
+    placeholder="e.g., gluten-free, low-calorie, traditional recipe, etc."
+)
+
+# Get recommendation button
+if st.button("🍺 Get My Bavarian Recommendation!", use_container_width=True):
+    preferences = {
+        "beverage_type": beverage_type,
+        "occasion": occasion,
+        "flavor_preference": flavor_preference,
+        "alcohol_preference": alcohol_preference,
+        "temperature": temperature,
+        "sweetness": sweetness,
+        "carbonation": carbonation,
+        "serving_size": serving_size,
+        "special_notes": special_notes,
+        "timestamp": datetime.now().isoformat()
+    }
+    
+    with st.spinner("🔮 Consulting our Bavarian beverage master..."):
+        recommendation = get_recommendation(preferences)
         
-        <h4>🥨 Traditional Pairings</h4>
-        <p>Perfect with pretzels, sausages, and hearty Bavarian dishes.</p>
-        
-        <h4>🎪 Festive Spirit</h4>
-        <p>Every recommendation celebrates authentic Bavarian traditions.</p>
-    </div>
-    """, unsafe_allow_html=True)
+        if recommendation:
+            st.session_state.last_recommendation = recommendation
+            st.session_state.show_feedback = True
 
 # Display recommendation
 if hasattr(st.session_state, 'last_recommendation') and st.session_state.last_recommendation:
