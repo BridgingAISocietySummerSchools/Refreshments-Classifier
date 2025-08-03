@@ -12,26 +12,33 @@ app = FastAPI(title="Bavarian Beverage Recommender API", version="1.0.0")
 recommender = BavarianBeverageRecommender()
 
 class UserPreferences(BaseModel):
-    taste_profile: List[str]  # e.g., ["sweet", "refreshing", "strong"]
-    alcohol_preference: str   # "beer", "wine", "spirits", "no_alcohol", "low_alcohol"
-    occasion: str            # "oktoberfest", "casual", "celebration", "business", "romantic"
-    time_of_day: str         # "morning", "afternoon", "evening", "night"
-    season: str              # "spring", "summer", "autumn", "winter"
-    social_setting: str      # "alone", "friends", "family", "colleagues", "date"
-    experience_level: str    # "beginner", "intermediate", "expert"
-    dietary_restrictions: Optional[List[str]] = []  # ["vegetarian", "vegan", "gluten_free"]
-    mood: Optional[str] = "neutral"  # "happy", "relaxed", "energetic", "contemplative"
-    budget: Optional[str] = "medium"  # "low", "medium", "high"
+    beverage_type: str = "Beer"
+    occasion: str = "casual evening"
+    flavor_preference: str = "balanced"
+    alcohol_preference: int = 5  # 0-10 scale
+    temperature: str = "chilled"
+    sweetness: int = 5  # 1-10 scale
+    carbonation: str = "moderately carbonated"
+    serving_size: str = "Medium (0.5L)"
+    special_notes: str = ""
+    timestamp: Optional[str] = None
 
 class RecommendationResponse(BaseModel):
-    recommendation: str
+    id: str
+    name: str
+    type: str
+    description: str
+    reasoning: str
+    serving_suggestion: str
+    cultural_note: str
+    abv: float
     preferences_used: Dict
     timestamp: str
 
 class FeedbackRequest(BaseModel):
-    recommendation_id: Optional[int] = None
+    recommendation_id: str
     rating: int  # 1-5 scale
-    comments: Optional[str] = ""
+    feedback: Optional[str] = ""
 
 @app.on_event("startup")
 async def startup_event():
@@ -75,7 +82,7 @@ async def submit_feedback(feedback: FeedbackRequest):
         cursor.execute('''
             INSERT INTO feedback (recommendation_id, rating, comments)
             VALUES (?, ?, ?)
-        ''', (feedback.recommendation_id, feedback.rating, feedback.comments))
+        ''', (feedback.recommendation_id, feedback.rating, feedback.feedback))
         
         conn.commit()
         conn.close()

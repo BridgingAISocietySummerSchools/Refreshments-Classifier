@@ -1,162 +1,249 @@
-# Beverage Quality Classifier 🥤
+# 🍺 Bavarian Beverage Recommender (LLM Branch)
 
-A machine learning web application that classifies beverage quality based on various characteristics. Built with Streamlit for the frontend, FastAPI for the backend, and scikit-learn for machine learning.
+An AI-powered beverage recommendation system that suggests authentic Bavarian drinks based on personal preferences. This branch uses Large Language Models (LLM) to provide culturally-aware, personalized recommendations with traditional Bavarian knowledge.
 
 ## Features
 
-- **🤖 Machine Learning Classifier**: Random Forest model trained on synthetic beverage data
-- **🎨 Interactive Frontend**: Streamlit web interface with sliders for feature input
-- **🔧 REST API**: FastAPI backend for serving predictions
-- **💾 Database Storage**: SQLite database for storing training data and predictions
-- **📊 Visualizations**: Interactive charts showing feature profiles and prediction probabilities
-- **📈 Statistics Dashboard**: View database statistics and quality distributions
+- **🤖 LLM-Powered Recommendations**: Uses OpenAI GPT-4 for intelligent, contextual beverage suggestions
+- **🏔️ Bavarian Cultural Expertise**: Deep knowledge of traditional Bavarian beverages and customs
+- **🎨 Bavarian-Themed UI**: Streamlit frontend with authentic Bavarian blue and gold styling
+- **👥 Personal Preference Analysis**: Considers taste, occasion, mood, social setting, and experience level
+- **🍺 Traditional Beverage Knowledge**: Covers beers, spirits, non-alcoholic drinks, and seasonal specialties
+- **💾 Feedback System**: Collects user ratings to improve recommendations
+- **📊 Analytics Dashboard**: View recommendation statistics and trends
 
-## Beverage Features Analyzed
+## Bavarian Beverages Covered
 
-- **Sweetness** (0-10): How sweet the beverage tastes
-- **Acidity** (0-10): Level of acidity
-- **Bitterness** (0-10): Level of bitterness
-- **Carbonation** (0-10): Amount of carbonation/fizziness
-- **Alcohol Content** (0-15%): Percentage of alcohol by volume
-- **Temperature** (0-25°C): Serving temperature
-- **Clarity** (0-10): How clear/transparent the beverage is
-- **Aroma Intensity** (0-10): Strength of the beverage's aroma
+### Traditional Beers
+- **Weissbier** (Wheat Beer) - Bavaria's cloudy specialty
+- **Märzen** (Oktoberfest Beer) - The famous festival beer
+- **Helles** - Light, refreshing Munich-style lager
+- **Augustiner, Spaten, Löwenbräu** - Historic brewery selections
 
-## Quality Classifications
+### Non-Alcoholic Specialties
+- **Apfelschorle** - Apple juice with sparkling water
+- **Spezi** - Traditional cola-orange mix
+- **Radler** - Beer and lemonade combination
+- **Various Schorles** - Fruit juice spritzers
 
-- **Poor**: Below average quality, needs significant improvement
-- **Fair**: Acceptable quality with room for improvement
-- **Good**: Above average quality, quite enjoyable
-- **Excellent**: Outstanding quality with exceptional characteristics
+### Spirits & Seasonal Drinks
+- **Obstler** - Traditional fruit brandy
+- **Enzian** - Gentian root schnapps
+- **Glühwein** - Mulled wine for winter
+- **Feuerzangenbowle** - Traditional fire punch
+
+## Personal Preference Categories
+
+The system analyzes:
+- **Taste Profile**: Sweet, bitter, refreshing, strong, etc.
+- **Alcohol Preference**: Beer, wine, spirits, non-alcoholic
+- **Occasion**: Oktoberfest, casual evening, celebration, business
+- **Social Setting**: Alone, friends, family, colleagues
+- **Experience Level**: Beginner to Bavarian beverage connoisseur
+- **Mood & Season**: Matching drinks to your current state
+- **Dietary Restrictions**: Accommodating special needs
 
 ## Installation & Setup
 
-1. **Clone the repository**:
+### Prerequisites
+- Python 3.8+
+- OpenAI API key (optional - fallback recommendations available)
+
+### Quick Start
+
+1. **Clone and setup**:
    ```bash
    git clone <repository-url>
    cd Refreshments-Classifier
-   ```
-
-2. **Run the setup script**:
-   ```bash
-   chmod +x setup.sh
+   git checkout llm
+   chmod +x setup.sh start.sh
    ./setup.sh
    ```
 
-   Or manually:
+2. **Configure API key** (optional):
+   ```bash
+   # Edit .env file
+   OPENAI_API_KEY=your-openai-api-key-here
+   ```
+
+3. **Start the application**:
+   ```bash
+   ./start.sh
+   ```
+
+### Manual Setup
+
+1. **Create virtual environment**:
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate
+   ```
+
+2. **Install dependencies**:
    ```bash
    pip install -r requirements.txt
-   python ml_classifier.py
+   ```
+
+3. **Initialize database**:
+   ```bash
+   python llm_recommender.py
+   ```
+
+4. **Run services**:
+   ```bash
+   # Terminal 1: Start API
+   python llm_api.py
+   
+   # Terminal 2: Start Streamlit
+   streamlit run streamlit_app.py
    ```
 
 ## Usage
 
-### 1. Start the API Server
-```bash
-python api.py
-```
-The API will be available at `http://localhost:8000`
+### Web Interface
+1. Visit `http://localhost:8501`
+2. Navigate through the Bavarian-themed interface
+3. Fill out your preferences in the consultation form
+4. Get personalized recommendations with cultural context
+5. Rate recommendations to help improve the system
 
-### 2. Start the Streamlit App
-In a new terminal:
-```bash
-streamlit run streamlit_app.py
-```
-The web interface will be available at `http://localhost:8501`
-
-### 3. Using the Application
-
-1. **Navigate to the Classifier page**
-2. **Adjust the sliders** to match your beverage's characteristics
-3. **Click "Predict Quality"** to get the classification
-4. **View results** including:
-   - Quality prediction (Poor/Fair/Good/Excellent)
-   - Confidence level
-   - Probability distribution across all quality levels
-   - Feature profile radar chart
-
-## API Endpoints
-
-- `GET /`: API information
-- `POST /predict`: Predict beverage quality
-- `GET /health`: Health check
-- `GET /feature-info`: Get feature information and ranges
+### API Endpoints
+- `POST /recommend`: Get personalized recommendations
+- `GET /preferences-options`: Available preference choices
+- `GET /bavarian-beverages`: List of traditional beverages
+- `POST /feedback`: Submit recommendation ratings
+- `GET /statistics`: View recommendation analytics
 
 ### Example API Usage
 
 ```python
 import requests
 
-# Predict quality
-features = {
-    "sweetness": 7.5,
-    "acidity": 3.2,
-    "bitterness": 2.1,
-    "carbonation": 8.0,
-    "alcohol_content": 5.5,
-    "temperature": 4.0,
-    "clarity": 9.0,
-    "aroma_intensity": 8.5
+preferences = {
+    "taste_profile": ["refreshing", "not too bitter"],
+    "alcohol_preference": "beer",
+    "occasion": "casual_evening",
+    "social_setting": "with_friends",
+    "experience_level": "beginner",
+    "season": "summer",
+    "mood": "relaxed"
 }
 
-response = requests.post("http://localhost:8000/predict", json=features)
-prediction = response.json()
-print(f"Quality: {prediction['quality']}")
-print(f"Confidence: {prediction['confidence']:.2%}")
+response = requests.post(
+    "http://localhost:8000/recommend", 
+    json=preferences
+)
+recommendation = response.json()
+print(recommendation["recommendation"])
 ```
 
-## Project Structure
+## System Architecture
 
 ```
-Refreshments-Classifier/
-├── ml_classifier.py      # Machine learning model and data generation
-├── api.py               # FastAPI backend server
-├── streamlit_app.py     # Streamlit frontend application
-├── requirements.txt     # Python dependencies
-├── setup.sh            # Setup script
-├── README.md           # This file
-├── models/             # Saved ML models (created after training)
-│   ├── beverage_classifier.pkl
-│   └── scaler.pkl
-└── beverage_data.db    # SQLite database (created after setup)
+┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
+│  Streamlit UI   │───▶│   FastAPI API    │───▶│  LLM Provider   │
+│ (Bavarian Theme)│    │ (llm_api.py)     │    │  (OpenAI GPT-4) │
+└─────────────────┘    └──────────────────┘    └─────────────────┘
+         │                       │                       
+         │                       ▼                       
+         │              ┌──────────────────┐              
+         │              │ LLM Recommender  │              
+         │              │(llm_recommender.py)│              
+         │              └──────────────────┘              
+         │                       │                       
+         ▼                       ▼                       
+┌─────────────────┐    ┌──────────────────┐              
+│   User Feedback │    │  SQLite Database │              
+│     System      │    │  (Preferences &  │              
+│                 │    │ Recommendations) │              
+└─────────────────┘    └──────────────────┘              
 ```
 
-## Technical Details
+## Bavarian Cultural Features
 
-### Machine Learning Model
-- **Algorithm**: Random Forest Classifier
-- **Features**: 8 numerical features representing beverage characteristics
-- **Target**: 4-class quality classification
-- **Training Data**: 2000 synthetic samples with realistic feature correlations
+### Gemütlichkeit Integration
+The system understands and incorporates the Bavarian concept of "Gemütlichkeit" - the warm, friendly, cheerful atmosphere that defines Bavarian social drinking culture.
 
-### Data Generation
-The synthetic data is generated with realistic correlations between features and quality:
-- Higher clarity and aroma intensity correlate with better quality
-- Extreme values in acidity or bitterness may reduce quality
-- Optimal temperature ranges enhance quality
-- Balanced feature combinations result in higher quality ratings
+### Seasonal Awareness
+- **Spring**: Maibock celebrations and fresh seasonal beers
+- **Summer**: Beer garden culture and refreshing drinks
+- **Autumn**: Oktoberfest traditions and Märzen beers
+- **Winter**: Warming beverages like Glühwein and Feuerzangenbowle
 
-### Database Schema
-- **beverages**: Training data with features and quality labels
-- **predictions**: User predictions with timestamps and confidence scores
+### Regional Expertise
+Knowledge of specific breweries, their histories, and regional specialties:
+- Munich: Augustiner (1328), Spaten, Löwenbräu
+- Freising: Weihenstephaner (world's oldest brewery)
+- Kelheim: Schneider Weisse (wheat beer specialists)
 
-## Future Enhancements
+## Configuration
 
-- [ ] Add real beverage data collection
-- [ ] Implement model retraining functionality
-- [ ] Add data export capabilities
-- [ ] Include more beverage types and categories
-- [ ] Add user authentication and personal prediction history
-- [ ] Implement A/B testing for model improvements
+### Environment Variables (.env)
+```bash
+OPENAI_API_KEY=your-openai-api-key-here
+```
+
+### API Configuration (llm_api.py)
+- Model: GPT-4 (configurable)
+- Temperature: 0.7 (balanced creativity/consistency)
+- Max tokens: 800 (detailed recommendations)
+
+## Project Structure (LLM Branch)
+
+```
+Refreshments-Classifier/ (llm branch)
+├── streamlit_app.py          # Bavarian-themed Streamlit frontend
+├── llm_api.py               # FastAPI backend for LLM recommendations
+├── llm_recommender.py       # Core LLM recommendation engine
+├── streamlit_app_ml.py      # Original ML-based app (preserved)
+├── requirements.txt         # Dependencies (includes OpenAI)
+├── setup.sh                # LLM branch setup script
+├── start.sh                # Quick start script
+├── .env                    # Environment configuration
+├── README.md               # This file
+├── venv/                   # Virtual environment
+└── bavarian_recommendations.db  # SQLite database
+```
+
+## Differences from Main Branch
+
+| Feature | Main Branch | LLM Branch |
+|---------|-------------|------------|
+| **Recommendation Engine** | Scikit-learn ML | OpenAI GPT-4 |
+| **Input Type** | Beverage characteristics | Personal preferences |
+| **Cultural Knowledge** | Generic quality | Bavarian traditions |
+| **UI Theme** | Standard | Bavarian blue/gold |
+| **Database** | beverage_data.db | bavarian_recommendations.db |
+| **Output** | Quality rating | Cultural recommendations |
+
+## Fallback System
+
+If OpenAI API is unavailable:
+- System provides traditional Bavarian recommendations
+- Based on preference patterns and cultural knowledge
+- Ensures continuous functionality without external dependencies
 
 ## Contributing
 
 1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
+2. Create feature branch: `git checkout -b feature/bavarian-enhancement`
+3. Make changes respecting Bavarian cultural authenticity
+4. Test with various preference combinations
+5. Submit pull request
+
+## Traditional Bavarian Expressions
+
+The system incorporates authentic Bavarian expressions:
+- **Prost!** - Cheers!
+- **Grüß Gott!** - Traditional Bavarian greeting
+- **Gemütlichkeit** - Cozy, friendly atmosphere
+- **Auf geht's!** - Let's go!
+- **Auf Wiedersehen!** - Goodbye!
 
 ## License
 
 This project is open source and available under the MIT License.
+
+---
+
+**Prost! Enjoy discovering the rich beverage culture of Bavaria! 🍺🥨**
